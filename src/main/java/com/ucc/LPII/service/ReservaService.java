@@ -1,10 +1,12 @@
 package com.ucc.LPII.service;
 
+import com.ucc.LPII.dto.ReservaResponseDTO;
 import com.ucc.LPII.entity.Reserva;
 import com.ucc.LPII.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,9 +36,10 @@ public class ReservaService {
         Optional<Reserva> reservaOpt = reservaRepository.findById(id);
         if(reservaOpt.isPresent()){
             Reserva reservaModificada = reservaOpt.get();
-            reservaModificada.setNombre(reserva.getNombre());
-            reservaModificada.setEdad(reserva.getEdad());
-            reservaModificada.setCorreo(reserva.getCorreo());
+            reservaModificada.setCantidadPersonas(reserva.getCantidadPersonas());
+            reservaModificada.setFechaReserva(reserva.getFechaReserva());
+            reservaModificada.setIdUsuario(reserva.getIdUsuario());
+            reservaModificada.setObservaciones(reserva.getObservaciones());
             return reservaRepository.save(reservaModificada);
 
         }else {
@@ -46,5 +49,28 @@ public class ReservaService {
 
     public void borrarUnaReserva(Long id) {
         reservaRepository.deleteById(id);
+    }
+
+
+    // -------MAPPERS ( A MANO PARA QUE VEAN QUE NO HAY MAGIA ) ---------
+
+    private ReservaResponseDTO toDTO (Reserva reserva){
+        return new ReservaResponseDTO(
+                reserva.getId(),
+                reserva.getFechaReserva(),
+                reserva.getCantidadPersonas(),
+                reserva.getObservaciones(),
+                reserva.getIdUsuario()
+        );
+    }
+
+    private Reserva toEntity(ReservaResponseDTO reservaDTO){
+        Reserva reserva = new Reserva ();
+
+        reserva.setIdUsuario(reservaDTO.idUsuario());
+        reserva.setFechaReserva(reservaDTO.fechaReserva());
+        reserva.setCantidadPersonas(reservaDTO.cantidadPersonas());
+        reserva.setObservaciones(reservaDTO.observaciones());
+        return reserva;
     }
 }
