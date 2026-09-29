@@ -22,5 +22,4 @@ public class Reserva {
     private LocalDateTime fechaReserva; // fecha + hora de la reserva
     private int cantidadPersonas;
     private String observaciones; //Opcional - por ej: 5 adultos y un niño/bebe
-
 }

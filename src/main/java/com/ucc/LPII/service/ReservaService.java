@@ -1,7 +1,9 @@
 package com.ucc.LPII.service;
 
+import com.ucc.LPII.dto.ReservaRequestDTO;
 import com.ucc.LPII.dto.ReservaResponseDTO;
 import com.ucc.LPII.entity.Reserva;
+import com.ucc.LPII.mapper.ReservaMapper;
 import com.ucc.LPII.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,33 +17,46 @@ public class ReservaService {
     @Autowired
     ReservaRepository reservaRepository;
 
-    public List<Reserva> obtenerTodasLasReservas() {
-        return reservaRepository.findAll();
+    private final ReservaMapper reservaMapper;
+
+    public ReservaService(ReservaMapper reservaMapper) {
+        this.reservaMapper = reservaMapper;
     }
 
-    public Reserva obtenerUnaReserva(Long id) {
+    public List<ReservaResponseDTO> obtenerTodasLasReservas() {
+        return reservaRepository.findAll()
+                .stream()
+                .map(reservaMapper::entityToDTO)
+                .toList();
+    }
+
+    public ReservaResponseDTO obtenerUnaReserva(Long id) {
         Optional<Reserva> reservaOpt = reservaRepository.findById(id);
         if(reservaOpt.isPresent()){
-            return reservaOpt.get();
+            Reserva reserva = reservaOpt.get();
+            return reservaMapper.entityToDTO(reserva);
         }else {
             return null;
         }
     }
 
-    public Reserva agregarReserva(Reserva reserva) {
-        return reservaRepository.save(reserva);
+    public ReservaResponseDTO agregarReserva(ReservaRequestDTO dto) {
+        Reserva reserva = reservaMapper.dtoToEntity(dto);
+        Reserva reservaGuardada = reservaRepository.save(reserva);
+        return reservaMapper.entityToDTO(reservaGuardada);
     }
 
-    public Reserva modificarReserva(Long id, Reserva reserva){
+    public ReservaResponseDTO modificarReserva(Long id, ReservaRequestDTO dto){
         Optional<Reserva> reservaOpt = reservaRepository.findById(id);
         if(reservaOpt.isPresent()){
             Reserva reservaModificada = reservaOpt.get();
-            reservaModificada.setCantidadPersonas(reserva.getCantidadPersonas());
-            reservaModificada.setFechaReserva(reserva.getFechaReserva());
-            reservaModificada.setIdUsuario(reserva.getIdUsuario());
-            reservaModificada.setObservaciones(reserva.getObservaciones());
-            return reservaRepository.save(reservaModificada);
+            reservaModificada.setCantidadPersonas(dto.cantidadPersonas());
+            reservaModificada.setFechaReserva(dto.fechaReserva());
+            reservaModificada.setIdUsuario(dto.idUsuario());
+            reservaModificada.setObservaciones(dto.observaciones());
 
+            Reserva reservaGuardada = reservaRepository.save(reservaModificada);
+            return reservaMapper.entityToDTO(reservaGuardada);
         }else {
             return null;
         }
@@ -52,25 +67,4 @@ public class ReservaService {
     }
 
 
-    // -------MAPPERS ( A MANO PARA QUE VEAN QUE NO HAY MAGIA ) ---------
-
-    private ReservaResponseDTO toDTO (Reserva reserva){
-        return new ReservaResponseDTO(
-                reserva.getId(),
-                reserva.getFechaReserva(),
-                reserva.getCantidadPersonas(),
-                reserva.getObservaciones(),
-                reserva.getIdUsuario()
-        );
-    }
-
-    private Reserva toEntity(ReservaResponseDTO reservaDTO){
-        Reserva reserva = new Reserva ();
-
-        reserva.setIdUsuario(reservaDTO.idUsuario());
-        reserva.setFechaReserva(reservaDTO.fechaReserva());
-        reserva.setCantidadPersonas(reservaDTO.cantidadPersonas());
-        reserva.setObservaciones(reservaDTO.observaciones());
-        return reserva;
-    }
 }

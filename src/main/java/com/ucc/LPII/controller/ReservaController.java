@@ -1,5 +1,7 @@
 package com.ucc.LPII.controller;
 
+import com.ucc.LPII.dto.ReservaRequestDTO;
+import com.ucc.LPII.dto.ReservaResponseDTO;
 import com.ucc.LPII.entity.Reserva;
 import com.ucc.LPII.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +21,29 @@ public class ReservaController {
 
     // obtener todos
     @GetMapping("/all")
-    public List<Reserva> obtenerTodasLasReservas() {
+    public List<ReservaResponseDTO> obtenerTodasLasReservas() {
         return reservaService.obtenerTodasLasReservas();
     }
 
     //obtener uno por id
     @GetMapping("/{id}")
-    public Reserva obtenerUnaReserva(@PathVariable("id") Long id) {
+    public ReservaResponseDTO obtenerUnaReserva(@PathVariable("id") Long id) {
         return reservaService.obtenerUnaReserva(id);
     }
 
     // agregar una reserva
     @PostMapping("/add")
-    public Reserva agregarReserva(@RequestBody Reserva reserva) {
-        return reservaService.agregarReserva(reserva);
+    public ReservaResponseDTO agregarReserva(@RequestBody ReservaRequestDTO dto) {
+        return reservaService.agregarReserva(dto);
     }
 
     // modificar una reserva
     @PutMapping("/{id}")
-    public Reserva modificarReserva(@PathVariable("id") Long id,
-                                    @RequestBody Reserva reserva) {
-        return reservaService.modificarReserva(id, reserva);
+    public ReservaResponseDTO modificarReserva(@PathVariable("id") Long id,
+                                    @RequestBody ReservaRequestDTO dto) {
+        return reservaService.modificarReserva(id, dto);
     }
     // eliminar una reserva
-
     @DeleteMapping("/{id}")
     public void eliminarReserva(@PathVariable("id") Long id) {
         reservaService.borrarUnaReserva(id);

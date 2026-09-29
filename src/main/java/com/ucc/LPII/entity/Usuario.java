@@ -20,6 +20,7 @@ public class Usuario {
     private String nombre;
     private String correo;
     private int edad;
+    private String contrasena;
     // Getters y setters
     // Constructor vacio/conargumento
 
