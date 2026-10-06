@@ -3,6 +3,7 @@ package com.ucc.LPII.service;
 import com.ucc.LPII.dto.ReservaRequestDTO;
 import com.ucc.LPII.dto.ReservaResponseDTO;
 import com.ucc.LPII.entity.Reserva;
+import com.ucc.LPII.exception.ReservaNotFoundException;
 import com.ucc.LPII.mapper.ReservaMapper;
 import com.ucc.LPII.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,13 @@ import java.util.Optional;
 
 @Service
 public class ReservaService {
-    @Autowired
-    ReservaRepository reservaRepository;
 
     private final ReservaMapper reservaMapper;
+    private final ReservaRepository reservaRepository;
 
-    public ReservaService(ReservaMapper reservaMapper) {
+    public ReservaService(ReservaMapper reservaMapper, ReservaRepository reservaRepository) {
         this.reservaMapper = reservaMapper;
+        this.reservaRepository = reservaRepository;
     }
 
     public List<ReservaResponseDTO> obtenerTodasLasReservas() {
@@ -31,13 +32,8 @@ public class ReservaService {
     }
 
     public ReservaResponseDTO obtenerUnaReserva(Long id) {
-        Optional<Reserva> reservaOpt = reservaRepository.findById(id);
-        if(reservaOpt.isPresent()){
-            Reserva reserva = reservaOpt.get();
-            return reservaMapper.entityToDTO(reserva);
-        }else {
-            return null;
-        }
+        Reserva reserva = reservaRepository.findById(id).orElseThrow(() -> new ReservaNotFoundException(id));
+        return reservaMapper.entityToDTO(reserva);
     }
 
     public ReservaResponseDTO agregarReserva(ReservaRequestDTO dto) {

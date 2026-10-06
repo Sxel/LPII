@@ -10,12 +10,13 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
-    @Autowired
-    UsuarioRepository usuarioRepository;
-    private final UsuarioMapper usuarioMapper;
 
-    public UsuarioService(UsuarioMapper usuarioMapper) {
+    private final UsuarioMapper usuarioMapper;
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioMapper usuarioMapper, UsuarioRepository usuarioRepository) {
         this.usuarioMapper = usuarioMapper;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<UsuarioDTO> obtenerTodosLosUsuarios() {
