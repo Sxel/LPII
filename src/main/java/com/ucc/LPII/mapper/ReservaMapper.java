@@ -3,12 +3,15 @@ package com.ucc.LPII.mapper;
 import com.ucc.LPII.dto.ReservaRequestDTO;
 import com.ucc.LPII.dto.ReservaResponseDTO;
 import com.ucc.LPII.entity.Reserva;
+import com.ucc.LPII.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReservaMapper {
 
-    public ReservaMapper() {
+    private final UsuarioMapper usuarioMapper;
+    public ReservaMapper(UsuarioMapper usuarioMapper) {
+        this.usuarioMapper = usuarioMapper;
     }
 
     public ReservaResponseDTO entityToDTO (Reserva reserva){
@@ -17,13 +20,13 @@ public class ReservaMapper {
                 reserva.getFechaReserva(),
                 reserva.getCantidadPersonas(),
                 reserva.getObservaciones(),
-                reserva.getIdUsuario()
+                usuarioMapper.entityToDTO(reserva.getUsuario())
         );
     }
 
-    public Reserva dtoToEntity(ReservaRequestDTO reservaDTO){
+    public Reserva dtoToEntity(ReservaRequestDTO reservaDTO, Usuario usuario){
         Reserva reserva = new Reserva ();
-        reserva.setIdUsuario(reservaDTO.idUsuario());
+        reserva.setUsuario(usuario);
         reserva.setFechaReserva(reservaDTO.fechaReserva());
         reserva.setCantidadPersonas(reservaDTO.cantidadPersonas());
         reserva.setObservaciones(reservaDTO.observaciones());

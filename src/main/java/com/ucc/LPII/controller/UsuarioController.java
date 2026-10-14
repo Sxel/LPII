@@ -2,6 +2,7 @@ package com.ucc.LPII.controller;
 
 import com.ucc.LPII.dto.UsuarioDTO;
 import com.ucc.LPII.entity.Usuario;
+import com.ucc.LPII.mapper.UsuarioMapper;
 import com.ucc.LPII.repository.UsuarioRepository;
 import com.ucc.LPII.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     //  definir get, post, put, delete
     // http://localhost:8080/api/usuarios/all
     @GetMapping("/all")
@@ -28,12 +33,14 @@ public class UsuarioController {
     }
 
     @PostMapping("/add")
-    public Usuario agregarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public UsuarioDTO agregarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
         usuario.setNombre(usuarioDTO.nombre());
         usuario.setCorreo(usuarioDTO.correo());
         usuario.setEdad(usuarioDTO.edad());
-        return usuarioRepository.save(usuario);
+
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        return usuarioMapper.entityToDTO(usuarioGuardado);
     }
 
     // put / delete

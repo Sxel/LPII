@@ -7,6 +7,6 @@ public record ReservaResponseDTO(
         LocalDateTime fechaReserva,
         int cantidadPersonas,
         String observaciones,
-        Long idUsuario
+        UsuarioDTO usuarioDTO
 ) {
 }

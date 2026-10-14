@@ -6,6 +6,7 @@ import com.ucc.LPII.entity.Reserva;
 import com.ucc.LPII.mapper.UsuarioMapper;
 import com.ucc.LPII.repository.UsuarioRepository;
 import com.ucc.LPII.service.ReservaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +43,16 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.obtenerUnaReserva(id));
     }
 
+    // obtener reservas por idUsuario
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<ReservaResponseDTO>> obtenerReservasByUsuario(
+            @PathVariable("idUsuario") Long idUsuario){
+        List<ReservaResponseDTO> reservas = reservaService.obtenerReservasByUsuario(idUsuario);
+        return ResponseEntity.ok(reservas);
+    }
     // agregar una reserva
     @PostMapping()
-    public ResponseEntity<ReservaResponseDTO>agregarReserva(@RequestBody ReservaRequestDTO dto){
+    public ResponseEntity<ReservaResponseDTO>agregarReserva(@Valid @RequestBody ReservaRequestDTO dto){
         ReservaResponseDTO creada = reservaService.agregarReserva(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
@@ -63,8 +71,6 @@ public class ReservaController {
     }
 
     // eliminar una reserva
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarReserva(@PathVariable("id") Long id) {
         reservaService.borrarUnaReserva(id);

@@ -24,4 +24,7 @@ public class Usuario {
     // Getters y setters
     // Constructor vacio/conargumento
 
+    //Authenticacion y Authorizacion
+
+    // LOGIN - ACCESO AL BACKEND
 }

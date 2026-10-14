@@ -18,7 +18,11 @@ public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long idUsuario; //En la proxima clase veremos como relacionar las dos tablas
+    // Muchas reservas tienen 1 usuario
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
     private LocalDateTime fechaReserva; // fecha + hora de la reserva
     private int cantidadPersonas;
     private String observaciones; //Opcional - por ej: 5 adultos y un niño/bebe
