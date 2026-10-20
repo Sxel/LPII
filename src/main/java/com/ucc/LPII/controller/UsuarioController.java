@@ -1,11 +1,15 @@
 package com.ucc.LPII.controller;
 
 import com.ucc.LPII.dto.UsuarioDTO;
+import com.ucc.LPII.dto.UsuarioRegistroDTO;
 import com.ucc.LPII.entity.Usuario;
 import com.ucc.LPII.mapper.UsuarioMapper;
 import com.ucc.LPII.repository.UsuarioRepository;
 import com.ucc.LPII.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,15 +36,9 @@ public class UsuarioController {
         return usuarioService.obtenerTodosLosUsuarios();
     }
 
-    @PostMapping("/add")
-    public UsuarioDTO agregarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario();
-        usuario.setNombre(usuarioDTO.nombre());
-        usuario.setCorreo(usuarioDTO.correo());
-        usuario.setEdad(usuarioDTO.edad());
-
-        Usuario usuarioGuardado = usuarioRepository.save(usuario);
-        return usuarioMapper.entityToDTO(usuarioGuardado);
+    @PostMapping("/registro")
+    public ResponseEntity<UsuarioDTO> registrar(@Valid @RequestBody UsuarioRegistroDTO dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.registrar(dto));
     }
 
     // put / delete

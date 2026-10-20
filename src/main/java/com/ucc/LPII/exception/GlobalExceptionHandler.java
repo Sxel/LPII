@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
         ErrorDTO error = new ErrorDTO(404, ex.getMessage(), java.time.LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
+    @ExceptionHandler(CorreoDuplicadoExeption.class)
+    public ResponseEntity<ErrorDTO> manejarCorreoDuplicado(CorreoDuplicadoExeption ex){
+        ErrorDTO error = new ErrorDTO(409, ex.getMessage(), java.time.LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
 }

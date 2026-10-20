@@ -18,8 +18,10 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
+    @Column(nullable = false, unique = true)
     private String correo;
     private int edad;
+    @Column(nullable = false)
     private String contrasena;
     // Getters y setters
     // Constructor vacio/conargumento
