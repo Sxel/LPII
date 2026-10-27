@@ -2,6 +2,7 @@ package com.ucc.LPII.service;
 
 import com.ucc.LPII.dto.UsuarioDTO;
 import com.ucc.LPII.dto.UsuarioRegistroDTO;
+import com.ucc.LPII.entity.Rol;
 import com.ucc.LPII.entity.Usuario;
 import com.ucc.LPII.exception.CorreoDuplicadoExeption;
 import com.ucc.LPII.mapper.UsuarioMapper;
@@ -43,7 +44,7 @@ public class UsuarioService {
         usuario.setEdad(dto.edad());
         //Importante, no vamos a guardar la contraseña sino el hash
         usuario.setContrasena(passwordEncoder.encode(dto.contrasena()));
-
+        usuario.setRol(Rol.USER);
         Usuario guardado = usuarioRepository.save(usuario);
         return  usuarioMapper.entityToDTO(guardado);
     }

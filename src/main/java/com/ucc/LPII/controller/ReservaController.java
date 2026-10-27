@@ -50,14 +50,13 @@ public class ReservaController {
         List<ReservaResponseDTO> reservas = reservaService.obtenerReservasByUsuario(idUsuario);
         return ResponseEntity.ok(reservas);
     }
+
     // agregar una reserva
     @PostMapping()
     public ResponseEntity<ReservaResponseDTO>agregarReserva(@Valid @RequestBody ReservaRequestDTO dto){
         ReservaResponseDTO creada = reservaService.agregarReserva(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
-
-
 
     // modificar una reserva
     @PutMapping("/{id}")

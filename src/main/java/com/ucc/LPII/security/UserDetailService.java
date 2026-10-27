@@ -23,6 +23,7 @@ public class UserDetailService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con correo: " + correo));
         return User.withUsername(usuario.getCorreo())
                 .password(usuario.getContrasena())
+                .roles(usuario.getRol().name())
                 .build();
     }
 }
